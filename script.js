@@ -10,11 +10,62 @@ const messageStatus = document.getElementById("messageStatus");
 const messagesList = document.getElementById("messagesList");
 const photosGrid = document.getElementById("photosGrid");
 const photoStatus = document.getElementById("photoStatus");
+const statusBanner = document.getElementById("statusBanner");
+const statusText = document.getElementById("statusText");
+const copyServerCommand = document.getElementById("copyServerCommand");
+const candleButton = document.getElementById("candleButton");
+const candleNote = document.getElementById("candleNote");
+const rotatingQuote = document.getElementById("rotatingQuote");
 
 const API_ENDPOINT = "/api/thanks";
 const MESSAGES_ENDPOINT = "/api/messages";
 const PHOTOS_ENDPOINT = "/api/photos";
 const CLICKED_KEY = "george-pappas-thanked";
+const CANDLE_KEY = "george-pappas-candle";
+const START_COMMAND = "python server.py";
+const ROTATING_QUOTES = [
+  "Every photo, word, and thank you keeps his story close.",
+  "Love like this does not disappear. It keeps showing up in the people it touched.",
+  "A memorial becomes warmer each time someone stops to remember with kindness.",
+  "The smallest message can become a lasting comfort for family and friends."
+];
+
+let memorialMode = "offline";
+
+function setMemorialStatus(mode, detail) {
+  memorialMode = mode;
+  statusBanner.classList.remove("is-live", "is-offline");
+  statusBanner.classList.add(mode === "live" ? "is-live" : "is-offline");
+  statusText.textContent = detail;
+}
+
+function setOfflineGuidance() {
+  const fileMode = window.location.protocol === "file:";
+  const detail = fileMode
+    ? "Open this memorial through the local server so the live comments and heart counter can work. Run python server.py, then visit http://127.0.0.1:8000."
+    : "The memorial server is not responding yet. Run python server.py in this folder, then refresh the page for live comments and the shared heart counter.";
+  setMemorialStatus("offline", detail);
+}
+
+async function copyStartCommandToClipboard() {
+  try {
+    await navigator.clipboard.writeText(START_COMMAND);
+    copyServerCommand.textContent = "Copied";
+    window.setTimeout(() => {
+      copyServerCommand.textContent = "Copy Start Command";
+    }, 1600);
+  } catch (error) {
+    copyServerCommand.textContent = "Use: python server.py";
+  }
+}
+
+function startRotatingQuotes() {
+  let quoteIndex = 0;
+  window.setInterval(() => {
+    quoteIndex = (quoteIndex + 1) % ROTATING_QUOTES.length;
+    rotatingQuote.textContent = ROTATING_QUOTES[quoteIndex];
+  }, 4200);
+}
 
 async function loadCount() {
   buttonNote.classList.add("is-loading");
@@ -33,6 +84,7 @@ async function loadCount() {
 
     const data = await response.json();
     thanksCount.textContent = Number(data.count || 0).toLocaleString();
+    setMemorialStatus("live", "Live memorial connected. Comments and the all-time heart counter are active.");
 
     if (localStorage.getItem(CLICKED_KEY) === "true") {
       buttonNote.textContent = "Your thanks has already been added. George is remembered.";
@@ -41,7 +93,8 @@ async function loadCount() {
     }
   } catch (error) {
     thanksCount.textContent = "0";
-    buttonNote.textContent = "Run the memorial server to load the live all-time count.";
+    buttonNote.textContent = "Start the memorial server to load the live all-time count.";
+    setOfflineGuidance();
   } finally {
     buttonNote.classList.remove("is-loading");
   }
@@ -102,7 +155,7 @@ async function loadMessages() {
     const data = await response.json();
     renderMessages(Array.isArray(data.messages) ? data.messages : []);
   } catch (error) {
-    messagesList.innerHTML = '<div class="empty-messages">Messages are unavailable right now. Start the memorial server to enable them.</div>';
+    messagesList.innerHTML = '<div class="empty-messages">Messages need the memorial server. Run python server.py, then open http://127.0.0.1:8000.</div>';
   }
 }
 
@@ -141,7 +194,7 @@ async function loadPhotos() {
     const data = await response.json();
     renderPhotos(Array.isArray(data.photos) ? data.photos : []);
   } catch (error) {
-    photosGrid.innerHTML = '<div class="empty-messages">Photos are unavailable right now. Start the memorial server to enable the gallery.</div>';
+    photosGrid.innerHTML = '<div class="empty-messages">Photos need the memorial server too. Run python server.py, then open http://127.0.0.1:8000.</div>';
     photoStatus.textContent = "Gallery unavailable";
   }
 }
@@ -256,6 +309,24 @@ messageForm.addEventListener("submit", async (event) => {
   }
 });
 
+candleButton.addEventListener("click", () => {
+  candleButton.classList.toggle("is-lit");
+  const lit = candleButton.classList.contains("is-lit");
+  localStorage.setItem(CANDLE_KEY, lit ? "true" : "false");
+  candleNote.textContent = lit
+    ? "A candle is glowing in memory of George."
+    : "A quiet light in loving memory.";
+  createFlyingHearts();
+});
+
+copyServerCommand.addEventListener("click", copyStartCommandToClipboard);
+
+if (localStorage.getItem(CANDLE_KEY) === "true") {
+  candleButton.classList.add("is-lit");
+  candleNote.textContent = "A candle is glowing in memory of George.";
+}
+
 loadCount();
 loadPhotos();
 loadMessages();
+startRotatingQuotes();

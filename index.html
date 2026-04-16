@@ -14,6 +14,14 @@
     <div class="ambient ambient-left"></div>
     <div class="ambient ambient-right"></div>
 
+    <section class="status-banner" id="statusBanner">
+      <div>
+        <p class="section-label">Memorial Status</p>
+        <p class="status-text" id="statusText">Checking memorial connection...</p>
+      </div>
+      <button class="status-button" id="copyServerCommand" type="button">Copy Start Command</button>
+    </section>
+
     <nav class="top-nav" aria-label="Memorial sections">
       <a href="#tribute">Tribute</a>
       <a href="#photos">Photos</a>
@@ -26,6 +34,16 @@
       <p class="subtitle">
         A life remembered with warmth, gratitude, and love that continues to echo through every memory shared.
       </p>
+      <div class="hero-highlights">
+        <article class="highlight-card">
+          <p class="section-label">A Place To Gather</p>
+          <p class="highlight-copy">Leave a kind message, share gratitude, and keep George's memory bright.</p>
+        </article>
+        <article class="highlight-card">
+          <p class="section-label">Love Lives On</p>
+          <p class="highlight-copy" id="rotatingQuote">Every photo, word, and thank you keeps his story close.</p>
+        </article>
+      </div>
     </header>
 
     <main class="memorial-card">
@@ -44,6 +62,11 @@
         </button>
 
         <p class="button-note" id="buttonNote">Click the heart to leave a moment of thanks.</p>
+
+        <div class="comfort-row">
+          <button class="candle-button" id="candleButton" type="button">Light a Candle</button>
+          <p class="candle-note" id="candleNote">A quiet light in loving memory.</p>
+        </div>
       </section>
 
       <aside class="gratitude-panel">

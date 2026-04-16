@@ -72,6 +72,10 @@ class MemorialHandler(SimpleHTTPRequestHandler):
             self.send_json({"photos": list_photos()})
             return
 
+        if path == "/api/status":
+            self.send_json({"status": "ok"})
+            return
+
         if path == "/":
             self.path = "/index.html"
 
