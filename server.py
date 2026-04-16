@@ -258,6 +258,21 @@ class MemorialHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(BASE_DIR), **kwargs)
 
+    def end_headers(self) -> None:
+        if self.path.startswith("/api/"):
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+            self.send_header("Access-Control-Allow-Headers", "Content-Type, Accept")
+        super().end_headers()
+
+    def do_OPTIONS(self) -> None:
+        path = urlparse(self.path).path
+        if path.startswith("/api/"):
+            self.send_response(HTTPStatus.NO_CONTENT)
+            self.end_headers()
+            return
+        self.send_error(HTTPStatus.NOT_FOUND, "Not Found")
+
     def do_GET(self) -> None:
         path = urlparse(self.path).path
 

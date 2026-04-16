@@ -17,9 +17,6 @@ const candleButton = document.getElementById("candleButton");
 const candleNote = document.getElementById("candleNote");
 const rotatingQuote = document.getElementById("rotatingQuote");
 
-const API_ENDPOINT = "/api/thanks";
-const MESSAGES_ENDPOINT = "/api/messages";
-const PHOTOS_ENDPOINT = "/api/photos";
 const CLICKED_KEY = "george-pappas-thanked";
 const CANDLE_KEY = "george-pappas-candle";
 const START_COMMAND = "python server.py";
@@ -31,6 +28,23 @@ const ROTATING_QUOTES = [
 ];
 
 let memorialMode = "offline";
+const API_BASE_URL = getApiBaseUrl();
+const API_ENDPOINT = buildApiUrl("/api/thanks");
+const MESSAGES_ENDPOINT = buildApiUrl("/api/messages");
+const PHOTOS_ENDPOINT = buildApiUrl("/api/photos");
+const STATUS_ENDPOINT = buildApiUrl("/api/status");
+
+function getApiBaseUrl() {
+  if (window.location.protocol === "file:") {
+    return "http://127.0.0.1:8000";
+  }
+
+  return "";
+}
+
+function buildApiUrl(path) {
+  return `${API_BASE_URL}${path}`;
+}
 
 function setMemorialStatus(mode, detail) {
   memorialMode = mode;
@@ -42,7 +56,7 @@ function setMemorialStatus(mode, detail) {
 function setOfflineGuidance() {
   const fileMode = window.location.protocol === "file:";
   const detail = fileMode
-    ? "Open this memorial through the local server so the live comments and heart counter can work. Run python server.py, then visit http://127.0.0.1:8000."
+    ? "Start python server.py in this folder, then refresh. This page will connect to http://127.0.0.1:8000 for live comments and the shared heart counter."
     : "The memorial server is not responding yet. Run python server.py in this folder, then refresh the page for live comments and the shared heart counter.";
   setMemorialStatus("offline", detail);
 }
@@ -72,6 +86,16 @@ async function loadCount() {
   buttonNote.textContent = "Loading shared gratitude count...";
 
   try {
+    const statusResponse = await fetch(STATUS_ENDPOINT, {
+      headers: {
+        Accept: "application/json",
+      },
+    });
+
+    if (!statusResponse.ok) {
+      throw new Error("Unable to reach memorial server");
+    }
+
     const response = await fetch(API_ENDPOINT, {
       headers: {
         Accept: "application/json",
