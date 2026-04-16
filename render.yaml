@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: george-pappas-memorial
+    runtime: python
+    region: oregon
+    buildCommand: pip install -r requirements.txt
+    startCommand: python server.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: HOST
+        value: 0.0.0.0
+      - key: DATABASE_URL
+        fromDatabase:
+          name: george-pappas-memorial-db
+          property: connectionString
+
+databases:
+  - name: george-pappas-memorial-db
+    region: oregon

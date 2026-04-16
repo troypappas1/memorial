@@ -1,0 +1,25 @@
+George Pappas Memorial
+
+Local run:
+- Run `python server.py`
+- Open `http://127.0.0.1:8000`
+- Or double-click `start_memorial.bat`
+
+What changed:
+- The live heart counter now uses a real database instead of a local JSON file.
+- The message board now stores remarks in the database too.
+- Local development uses `memorial.db` via SQLite.
+- Hosted deployment uses Postgres automatically when `DATABASE_URL` is set.
+
+Deploy on Render:
+1. Push this repo to GitHub.
+2. Sign in to Render and create a new Blueprint deployment from this repository.
+3. Render will read `render.yaml` and create:
+   - a Python web service
+   - a Postgres database
+4. After the deploy finishes, open your Render URL. The live comments and shared heart counter will work for everyone from that public site.
+
+Important notes:
+- The repo includes `render.yaml` for the hosted service and database.
+- The hosted service binds to `0.0.0.0` and uses Render's `PORT`.
+- `thanks-data.json` is now legacy and no longer used by the backend.
