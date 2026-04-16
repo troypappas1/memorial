@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>In Loving Memory of George Pappas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <div class="ambient ambient-left"></div>
+    <div class="ambient ambient-right"></div>
+
+    <nav class="top-nav" aria-label="Memorial sections">
+      <a href="#tribute">Tribute</a>
+      <a href="#photos">Photos</a>
+      <a href="#messages">Messages</a>
+    </nav>
+
+    <header class="hero" id="tribute">
+      <p class="eyebrow">Rest In Peace</p>
+      <h1>George Pappas</h1>
+      <p class="subtitle">
+        A life remembered with warmth, gratitude, and love that continues to echo through every memory shared.
+      </p>
+    </header>
+
+    <main class="memorial-card">
+      <section class="tribute-panel">
+        <p class="section-label">A Gentle Tribute</p>
+        <h2>Forever in our hearts</h2>
+        <p class="tribute-copy">
+          This memorial page is a quiet place to pause, reflect, and send a simple thank you for the life, love,
+          and kindness George brought into the world.
+        </p>
+
+        <button class="heart-button" id="heartButton" type="button" aria-label="Send thanks in memory of George Pappas">
+          <span class="heart-shape"></span>
+          <span class="heart-glow"></span>
+          <span class="heart-text">Send Thanks</span>
+        </button>
+
+        <p class="button-note" id="buttonNote">Click the heart to leave a moment of thanks.</p>
+      </section>
+
+      <aside class="gratitude-panel">
+        <div class="counter-wrap">
+          <p class="section-label">Gratitude Counter</p>
+          <div class="counter-number" id="thanksCount">...</div>
+          <p class="counter-caption">thankful hearts shared</p>
+        </div>
+
+        <div class="quote-block">
+          <p>
+            "What we once enjoyed and deeply loved we can never lose, for all that we love deeply becomes a part of us."
+          </p>
+        </div>
+      </aside>
+    </main>
+
+    <section class="photos-card" id="photos">
+      <div class="messages-header">
+        <div>
+          <p class="section-label">Photo Gallery</p>
+          <h2>Remembering Through Photos</h2>
+        </div>
+        <p class="photo-note" id="photoStatus">Loading photos...</p>
+      </div>
+
+      <div class="photos-grid" id="photosGrid" aria-live="polite"></div>
+    </section>
+
+    <section class="messages-card" id="messages">
+      <div class="messages-header">
+        <div>
+          <p class="section-label">Shared Remembrance</p>
+          <h2>Leave a Message</h2>
+        </div>
+        <a class="repo-link" href="https://github.com/troypappas1/memorial.git" target="_blank" rel="noreferrer">
+          View Repository
+        </a>
+      </div>
+
+      <form class="message-form" id="messageForm">
+        <label class="sr-only" for="messageName">Your name</label>
+        <input id="messageName" name="name" type="text" maxlength="60" placeholder="Your name" required>
+
+        <label class="sr-only" for="messageText">Leave a message</label>
+        <textarea id="messageText" name="message" rows="4" maxlength="500" placeholder="Leave a message" required></textarea>
+
+        <button class="message-submit" id="messageSubmit" type="submit">Post Message</button>
+      </form>
+
+      <p class="message-status" id="messageStatus">Share a memory, a prayer, or a few kind words for George.</p>
+
+      <div class="messages-list" id="messagesList" aria-live="polite"></div>
+    </section>
+  </div>
+
+  <div class="hearts-layer" id="heartsLayer" aria-hidden="true"></div>
+  <script src="script.js"></script>
+</body>
+</html>
